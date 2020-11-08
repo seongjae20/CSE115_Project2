@@ -1,13 +1,14 @@
 import json
-import urllib.request
+import urllib3.request
 import buffalo
 
 
 def nycapi(str):
     dict = {"BURGLARY": 0, "RAPE": 0, "ROBBERY": 0, "ASSAULT": 0}
-    response = urllib.request.urlopen(str)
-    content = response.read().decode()
-    x = json.loads(content)
+    http = urllib3.PoolManager()
+    response = http.request('GET', str)
+    x = json.loads(response.data)
+
     for obj in x:
         if "ofns_desc" in obj:
             if obj["ofns_desc"] == "BURGLARY":
